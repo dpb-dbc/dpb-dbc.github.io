@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Title</title>
+    <meta charset="utf-8">
+    <style>
+      @import url(https://fonts.googleapis.com/css?family=Yanone+Kaffeesatz);
+      @import url(https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic);
+      @import url(https://fonts.googleapis.com/css?family=Ubuntu+Mono:400,700,400italic);
+
+      body { font-family: 'Droid Serif'; }
+      h1, h2, h3 {
+        font-family: 'Yanone Kaffeesatz';
+        font-weight: normal;
+      }
+      .remark-code, .remark-inline-code { font-family: 'Ubuntu Mono'; }
+    </style>
+  </head>
+  <body>
+    <textarea id="source">
+
+class: center, middle
+
+# Case
+## David Branner, Dev Bootcamp
+### 20151229
+
+---
+
+Just a couple of points:
+--
+
+
+First, there's no need to repeat the variable you're testing many times:
+--
+
+
+```ruby
+x = case
+    when y = 'a'
+      'letter a'
+    when y = 'b'; 'letter b'
+    when y = 'c' then 'letter c'
+    else 'who knows?'
+    end
+```
+--
+
+Instead, put that variable right after `case`:
+--
+
+```ruby
+x = case y
+    when 'a'
+      'letter a'
+    when 'b'; 'letter b'
+    when 'c' then 'letter c'
+    else 'who knows?'
+    end
+```
+
+---
+
+Second, you may find good uses for the "case equality operator", `===`.
+--
+
+
+Between `Fixnum` objects (ordinary numbers), it behaves the same as the regular "equality operator" `==`. 
+--
+
+But it is "overloaded" (given special, contextual meaning) with some classes.
+--
+
+
+With `Range` it matches when the variable is within the range:
+--
+
+
+```ruby
+population = 80_000
+kind_of_place = case population
+                when 0..1000; "village"
+                when 1001..100_000; "town"
+                when 100_000..Float::INFINITY; "city"
+                else "too big for my budget"
+                end
+```
+--
+
+
+(Remember — because I put `population` right after `case`, I don't have to write out an explicit `===` operator, but `case` treats it as though it's there, by default.)
+--
+
+With classes, `---` identifies an instance of the class:
+--
+
+
+```ruby
+a = [1, 2, 3]
+puts case a
+     when String then 'it is a string'
+     when Numeric then "it's a number"
+     when Array then 'we find that it is an array'
+     end
+```
+--
+
+
+And there are other examples, too…
+
+---
+
+class: center, middle
+
+## END
+
+    </textarea>
+    <script src="https://gnab.github.io/remark/downloads/remark-latest.min.js">
+    </script>
+    <script>
+      var slideshow = remark.create();
+    </script>
+
+<!-- From http://joshbode.github.io/remark/ansi.html#3, 20151229 -->
+    <script src="http://gnab.github.io/remark/downloads/remark-latest.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script type="text/javascript">
+      var hljs = remark.highlighter.engine;
+    </script>
+    <script src="terminal.language.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      var slideshow = remark.create({
+        highlightStyle: 'solarized_dark'
+      });
+      // extract the embedded styling from ansi spans
+      $('code.terminal > span.hljs-ansi').replaceWith(function(i, x) {
+        return x.replace(/<(\/?(\w+).*?)>/g, '<$1>')
+      });
+    </script>
+  </body>
+</html>
