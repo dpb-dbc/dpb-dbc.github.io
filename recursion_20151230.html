@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Title</title>
+    <meta charset="utf-8">
+    <style>
+      @import url(https://fonts.googleapis.com/css?family=Yanone+Kaffeesatz);
+      @import url(https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic);
+      @import url(https://fonts.googleapis.com/css?family=Ubuntu+Mono:400,700,400italic);
+
+      body { font-family: 'Droid Serif'; }
+      h1, h2, h3 {
+        font-family: 'Yanone Kaffeesatz';
+        font-weight: normal;
+      }
+      .remark-code, .remark-inline-code { font-family: 'Ubuntu Mono'; }
+    </style>
+  </head>
+  <body>
+    <textarea id="source">
+
+class: center, middle
+ 
+# Recursion
+## David Branner, Dev Bootcamp
+### 20151230
+
+---
+
+## Outline
+
+1. What recursion is
+1. Example: Counting down from some starting number
+1. Example: The Fibonacci Series (the most famous case)
+1. Example: Comparing all elements of a series to find the maximum
+
+---
+
+## What recursion is
+--
+
+Recursion means having a program call itself.
+--
+
+
+The reason to do this is if the task can be broken conveniently into two parts:
+--
+
+1. One relatively simple action, usually leaving some remainder as yet undone.
+--
+
+1. Handling of the undone remainder, by the same program.
+--
+
+
+The top-listed part is called the "base case". The bottom-listed part is called the "recursive case". 
+--
+
+
+I'm avoiding saying "part one" and "part two" because they're not usually carried out in that order 
+--
+
+— the recursive case is carried out first, usually over and over again, and when the base case is reached, recursion stops. That's why it's called the base case. 
+--
+
+
+(Aside: if you ever study mathematical proofs, you'll find that a recursive program has the same structure as an "inductive" proof — proving that `f(k)` is true for some value of `k` is the base case, and proving that `f(k+1)` is also true, is the recursive case.)
+
+---
+
+## What recursion is, cont'd
+--
+
+
+There are two insights involved:
+--
+
+1. The recursive case shows you the insight that the problem can be solved recursively.
+--
+
+1. The base case shows you the insight as to what stops the recursion.
+--
+
+
+You need both insights.
+--
+
+
+**But to read and understand, I suggest starting with the recursive case.**
+--
+
+
+Some examples, now…
+---
+
+## Example: Counting down from some starting number
+--
+
+
+```ruby
+def countdown(items)
+  if items == 0           # Base case
+    puts "Here is the base case; we're done."
+    return 
+  else
+    puts "Counting down to #{items}, and then calling recursively..."
+    countdown(items-1)    # Call recursively
+  end
+end
+```
+
+---
+
+## Example: The Fibonacci Series 
+---
+
+## Example: The Fibonacci Series (the most famous case)
+--
+
+
+The Fibonacci Series is a [sequence of integers](https://oeis.org/A000045):
+--
+
+```text
+   0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, 233, 377, 610, 987, 1597, 2584, 
+   4181, 6765, 10946, 17711, 28657, 46368, 75025, 121393, 196418, 317811, 
+   514229, 832040, 1346269, 2178309, 3524578, 5702887, 9227465, 14930352, 
+   24157817, 39088169, ... (from On-line Encyclopedia of Integer Sequences)
+```
+--
+
+Each one is the sum of the previous two. 
+--
+
+That means if we want the `n`th one, all we have to do is add together the `(n-1)`st and the `(n-2)`nd. 
+--
+
+How do we find the `(n-1)`st? By adding together the `(n-2)`nd and the `(n-3)`rd. And so on.
+--
+
+
+
+```ruby
+# Return the nth Fibonacci number
+def fibonacci(n)
+  if n <= 1                          # Base case
+    puts "At base case: returning #{n}."
+    return n
+  else
+    puts "Now call fibonacci(#{n-1} [#{n}-1]) and fibonacci(#{n-2} [#{n}-2])"
+    fibonacci(n-1) + fibonacci(n-2)  # Call recursively
+  end
+end
+```
+--
+
+Because of the amount of duplicate work involved, this is not an effective use of recursion. 
+--
+
+But it illustrates the problem well.
+
+---
+
+## Example: Comparing all elements of a series to find the maximum
+--
+
+```ruby
+# Find maximum item in "things" by comparing them, two at a time,
+# and returning the larger one.
+def find_max(things)    
+  if things.length <= 2      # Base case: end recursion if this is true.
+    a = things[0]
+    b = things[-1]
+  else                       # Otherwise, call recursively.
+    a = find_max(things.slice!(0,things.length/2))
+    b = find_max(things)
+  end    
+
+  if a < b                   # This is the only actual comparison
+    b
+  else
+    a
+end
+```
+                                                                             
+---
+
+
+class: center, middle
+
+## END
+
+    </textarea>
+    <script src="https://gnab.github.io/remark/downloads/remark-latest.min.js">
+    </script>
+    <script>
+      var slideshow = remark.create();
+    </script>
+
+<!-- From http://joshbode.github.io/remark/ansi.html#3, 20151229 -->
+    <script src="http://gnab.github.io/remark/downloads/remark-latest.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script type="text/javascript">
+      var hljs = remark.highlighter.engine;
+    </script>
+    <script src="terminal.language.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      var slideshow = remark.create({
+        highlightStyle: 'solarized_dark'
+      });
+      // extract the embedded styling from ansi spans
+      $('code.terminal > span.hljs-ansi').replaceWith(function(i, x) {
+        return x.replace(/<(\/?(\w+).*?)>/g, '<$1>')
+      });
+    </script>
+  </body>
+</html>

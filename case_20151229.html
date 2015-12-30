@@ -82,7 +82,7 @@ kind_of_place = case population
                 when 0..1000; "village"
                 when 1001..100_000; "town"
                 when 100_000..Float::INFINITY; "city"
-                else "too big for my budget"
+                # No need for else here, because of Float::INFINITY, above.
                 end
 ```
 --
