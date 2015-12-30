@@ -101,13 +101,59 @@ Some examples, now…
 def countdown(items)
   if items == 0           # Base case
     puts "Here is the base case; we're done."
-    return 
   else
-    puts "Counting down to #{items}, and then calling recursively..."
+    puts "Counting down from #{items}, and then calling recursively..."
     countdown(items-1)    # Call recursively
+    puts "... now unwinding from recursive call at items = #{items}."
   end
 end
 ```
+--
+
+One other thing: Notice that the "now unwinding" line only starts running **after** we have hit the base case. 
+--
+
+Even though it appears in the code right after the recursive call to `countdown`, that `countdown` doesn't return until the base case has been hit.
+--
+
+
+Here's the output (next page):
+
+---
+
+## Example: Counting down from some starting number
+--
+
+
+```ruby
+[1] pry(main)> def countdown(items)
+[1] pry(main)*   if items == 0           # Base case  
+[1] pry(main)*     puts "Here is the base case; we're done."    
+[1] pry(main)*   else    
+[1] pry(main)*     puts "Counting down from #{items}, and then calling recursively..."    
+
+[1] pry(main)*     countdown(items-1)    # Call recursively    
+[1] pry(main)*     puts "... now unwinding from recursive call at items = #{items}."    
+
+[1] pry(main)*   end    
+[1] pry(main)* end  
+=> :countdown
+[2] pry(main)> countdown(5)
+Counting down from 5, and then calling recursively...
+Counting down from 4, and then calling recursively...
+Counting down from 3, and then calling recursively...
+Counting down from 2, and then calling recursively...
+Counting down from 1, and then calling recursively...
+Here is the base case; we're done.
+... now unwinding from recursive call at items = 1.
+... now unwinding from recursive call at items = 2.
+... now unwinding from recursive call at items = 3.
+... now unwinding from recursive call at items = 4.
+... now unwinding from recursive call at items = 5.
+=> nil
+```
+--
+
 
 ---
 
@@ -141,17 +187,18 @@ How do we find the `(n-1)`st? By adding together the `(n-2)`nd and the `(n-3)`rd
 
 
 ```ruby
-# Return the nth Fibonacci number
+# Return the nth Fibonacci number (zero-indexed)
 def fibonacci(n)
-  if n <= 1                          # Base case
+  if n <= 1                                   # Base case
     puts "At base case: returning #{n}."
-    return n
+    n
   else
     puts "Now call fibonacci(#{n-1} [#{n}-1]) and fibonacci(#{n-2} [#{n}-2])"
-    fibonacci(n-1) + fibonacci(n-2)  # Call recursively
+    answer = fibonacci(n-1) + fibonacci(n-2)  # Call recursively
+    puts "... now unwinding from fibonacci(#{n-1}) and fibonacci(#{n-2})"
+    answer
   end
-end
-```
+end```
 --
 
 Because of the amount of duplicate work involved, this is not an effective use of recursion. 
