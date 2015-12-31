@@ -260,11 +260,12 @@ In other words, the time-complexity is also O(n).
 --
 
 
-But! You can use `any?` to answer `true` or `false`, instead of returning a subarray:
+But! You can use `any?` to answer simply `true` or `false`, instead of returning a subarray:
 --
 
 ```ruby
-b.select {|subarray| subarray.include?(0)}.any?
+[2] pry(main)> b.select {|subarray| subarray.include?(0)}.any?
+=> true
 ```
 --
 
