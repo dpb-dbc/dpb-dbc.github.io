@@ -83,6 +83,16 @@ Solution:
 --
 
 By replicating an array with the method `dup`, we are making `d` totally separate from `c`.
+--
+
+
+But note that this only works for flat arrays. If you have a nested array, you'll have to `dup` each subelement, and so on down to any sub-sub-elements, etc.
+--
+
+```ruby
+new_array = Array.new
+old_array.map {|row| row.dup}
+```
 
                                                                                 
 ---
