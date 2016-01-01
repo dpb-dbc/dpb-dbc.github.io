@@ -90,10 +90,11 @@ But note that this only works for flat arrays. If you have a nested array, you'l
 --
 
 ```ruby
-new_array = Array.new
-old_array.map {|row| row.dup}
+[98] pry(main)> first_array # let's pretend it was defined earlier
+=> [[nil, nil, nil, nil], [nil, nil, nil, nil], [nil, nil, nil, nil]]
+[99] pry(main)> second_array = first_array.map {|row| row.dup}
+=> [[nil, nil, nil, nil], [nil, nil, nil, nil], [nil, nil, nil, nil]]
 ```
-
 
 ---
 
@@ -230,7 +231,7 @@ In other words, look for it in exactly the place you'd expect to find it — whi
 
 ---
 
-## Does a Nested Array Contain a Certain Element?, cont'd.
+## Does a Nested Array Contain a Certain Element?, c'd
 
 Other approaches:
 --
@@ -263,7 +264,7 @@ That seems like a recipe for confusion and error.
 
 ---
 
-## Does a Nested Array Contain a Certain Element?, cont'd.
+## Does a Nested Array Contain a Certain Element?, c'd
 
 Other approaches, cont'd:
 --
