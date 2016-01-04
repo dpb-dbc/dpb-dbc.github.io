@@ -31,7 +31,7 @@ class: center, middle
 --
 
 
-(Both are ways fostering **code reuse** and **modularization**.)
+(Both are ways of fostering **code reuse** and **modularization**.)
 --
 
 
@@ -79,8 +79,9 @@ Differences between modules and classes with respect to state:
 --
 
 
-    State is stored in the form of "attributes", of which there are different kinds. 
+State is stored in the form of "attributes", of which there are different kinds. 
 --
+
 Normally we are talking about "instance attributes", which are marked with a single `@` before the variable-name.
 --
 
@@ -89,13 +90,12 @@ An instance attribute may need to have "setter" and "getter" methods.
 --
 
 You assign values to it with the setter; you access its value with the getter.
---
-
-
-In practice, you will use this format:
 
 
 ---
+
+In practice, you will use this syntax most of the time:
+--
 
 ```ruby
 class MyClass
@@ -110,6 +110,9 @@ class MyClass
   end
 end
 ```
+--
+
+Accessing the three different kinds of attributes we just defined:
 --
 
 ```ruby
@@ -131,6 +134,16 @@ from (pry):18:in `__pry__'
 
 ---
 
+Note that there _is_ a way to access an attribute marked as `attr_writer`: 
+--
+
+write a method to do it — that's allowed, because it's happening within the class.
+--
+
+
+Here's an example of using a `to_s` to _display_ an `attr_writer` attribute (without actually returning it, though of course you could do that, too):
+--
+
 ```ruby
 class MyClass
   attr_writer :for_setter              # Can only write, not read.
@@ -139,11 +152,14 @@ class MyClass
     @for_setter = for_setter           # Can only be accessed within class.
   end
 
-  def to_s                             # Convenient way of accessing this.
+  def to_s                             # Convenient way of displaying this.
      'for_setter: ' + @for_setter
   end
 end
 ```
+--
+
+In actual use:
 --
 
 ```ruby
@@ -235,47 +251,47 @@ Both classes and modules are capitalized and use `CamelCase`.
 
 ## Terminology Review
 
- 1. state
+ 1. **state**
 --
 : any stored information (data)
 
- 1. constant
+ 1. **constant**
 --
 : data that will never need to be modified
 
- 1. attribute
+ 1. **attribute**
 --
 : state belonging to an object
 
- 1. instance
+ 1. **instance**
 --
 : an object constructed by some particular class
 
- 1. instantiate
+ 1. **instantiate**
 --
 : to construct an object
 
- 1. object
+ 1. **object**
 --
 : an instance of some class; more generally, a location in memory containing data or functionality
 
- 1. setter
+ 1. **setter**
 --
 : a kind of method that assigns data to an attribute
 
- 1. getter method
+ 1. **getter method**
 --
 : a kind of method that retrieves data stored in an attribute
 
- 1. `attr_writer`
+ 1. **`attr_writer`**
 --
 : an attribute for which a setter but not a getter is allowed
 
- 1. `attr_reader`
+ 1. **`attr_reader`**
 --
 : an attribute for which a getter but not a setter is allowed
 
- 1. `attr_accessor`
+ 1. **`attr_accessor`**
 --
 : an attribute for which both setter and getter are allowed
 
