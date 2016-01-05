@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <!-- Template from https://github.com/gnab/remark, 20151228 -->
+    <title>Title</title>
+    <meta charset="utf-8">
+    <style>
+      @import url(https://fonts.googleapis.com/css?family=Yanone+Kaffeesatz);
+      @import url(https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic);
+      @import url(https://fonts.googleapis.com/css?family=Ubuntu+Mono:400,700,400italic);
+
+      body { font-family: 'Droid Serif'; }
+      h1, h2, h3 {
+        font-family: 'Yanone Kaffeesatz';
+        font-weight: normal;
+      }
+      .remark-code, .remark-inline-code { font-family: 'Ubuntu Mono'; }
+    </style>
+  </head>
+  <body>
+    <textarea id="source">
+
+class: center, middle
+
+# Argument-Order Dependency
+## David Branner, Dev Bootcamp
+### 20160106
+
+---
+
+# What these slides cover
+
+ 1. The Problem
+
+ 1. The Solution
+
+ 1. Terminology Review
+
+---
+
+## The Problem
+--
+
+
+What does argument-order dependency mean?
+--
+
+
+It means that if a function or method takes more than one argument, you don't want to have to worry about what order they appear in. 
+--
+
+
+"Dependency" is a technical term for a requirement.
+--
+
+<!-- -->Example: 
+--
+
+
+```ruby
+class Grid
+  attr_accessor :rows, :cols
+  def initialize(rows, cols)
+    @rows = rows
+    @cols = cols
+  end
+end
+```
+--
+
+What if I forget the order of the arguments? 
+--
+
+Then I make a mess — instead of a grid `rows` high and `cols` wide, I get one `cols` high and `rows` wide.
+--
+
+```ruby
+[2] pry(main)> g = Grid.new(5, 3)
+=> #<Grid:0x007f8c7c140748 @cols=3, @rows=5>
+```
+
+Oops! I meant 3 rows by 5 columns… 
+
+---
+
+## The Solution
+--
+
+
+I can avoid that in two ways. 
+--
+
+The easy-but-tedious way is to specify the argument names when I pass them in:
+--
+
+```ruby
+[2] pry(main)> g = Grid.new(cols=5, rows=3)
+=> #<Grid:0x007f8c7c94d490 @cols=3, @rows=5>
+```
+--
+
+That's perfectly satisfactory. 
+--
+
+
+A more scalable way — the preferred way — is to put all possible arguments into a single hash, and then pass the hash in as the argument.
+
+---
+
+## The Solution, cont'd
+
+That requires us to prepare the method or function to receive a hash as its argument.
+--
+
+
+The recipe to use looks like this (here, `initialize`, but can be done anywhere):
+--
+
+```ruby
+class Grid
+  attr_accessor :rows, :cols
+  def initialize(args={})
+    @rows = args.fetch(:rows, nil)
+    @cols = args.fetch(:cols, nil)
+  end
+end
+```
+--
+
+<!-- -->Outcome:
+--
+
+```ruby
+[2] pry(main)> my_args = {rows: 5, cols: 3}
+=> {:rows=>5, :cols=>3}
+[3] pry(main)> g = Grid.new(my_args)
+=> #<Grid:0x007f8c7c02ce60 @cols=3, @rows=5>
+```
+--
+
+Because the argument is a hash, each key in it can be found independently. 
+--
+
+
+Presto! **Argument-order independence**!
+
+---
+
+## The Solution, cont'd
+
+```ruby
+class Grid
+  attr_accessor :rows, :cols
+  def initialize(args={})
+    @rows = args.fetch(:rows, nil)
+    @cols = args.fetch(:cols, nil)
+  end
+end
+```
+
+Notice two points:
+--
+
+ 1. The argument of `initialize` has become `args={}` — if nothing is passed in, `args` is by default an empty hash, so there's no error from getting the number of arguments wrong.
+--
+
+
+ 1. Because we are using `args.fetch` to retrieve the arguments, we can pass in a default argument after the key we want — here, `nil`. If the key doesn't occur in the hash, `nil` will be used instead, again avoiding an error.
+--
+
+
+```ruby
+[2] pry(main)> g = Grid.new
+=> #<Grid:0x007f8c7b847600 @cols=nil, @rows=nil>
+
+```
+---
+
+## Terminology Review
+--
+
+ 1. **dependency** 
+--
+: requirement, thing on which something else depends
+--
+
+
+ 1. **argument-order dependency**
+--
+: the fact that it matters what order a function's arguments appear in
+--
+ — unless you take special steps
+
+---
+
+
+class: center, middle
+
+## END
+
+    </textarea>
+    <script src="https://gnab.github.io/remark/downloads/remark-latest.min.js">
+    </script>
+    <script>
+      var slideshow = remark.create();
+    </script>
+
+<!-- From http://joshbode.github.io/remark/ansi.html#3, 20151229 -->
+    <script src="http://gnab.github.io/remark/downloads/remark-latest.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script type="text/javascript">
+      var hljs = remark.highlighter.engine;
+    </script>
+    <script src="terminal.language.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      var slideshow = remark.create({
+        highlightStyle: 'solarized_dark'
+      });
+      // extract the embedded styling from ansi spans
+      $('code.terminal > span.hljs-ansi').replaceWith(function(i, x) {
+        return x.replace(/<(\/?(\w+).*?)>/g, '<$1>')
+      });
+    </script>
+  </body>
+</html>

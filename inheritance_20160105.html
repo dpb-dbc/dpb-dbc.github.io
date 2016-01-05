@@ -31,9 +31,14 @@ class: center, middle
 # What these slides cover
 
  1. Inheritance
+
  1. Overriding methods
+
  1. Chaining methods
+
  1. Things to remember about `super`
+
+ 1. Terminology Review
 
 ---
 
@@ -205,7 +210,6 @@ first, surprise! afterwards...
 
 1. If the method takes arguments, `super` takes those arguments, too.
 
-<!-- qqq TODO: Argument-Order Dependency -->
 <!-- qqq TODO: composition -->
 <!-- qqq TODO: making private method public -->
 <!-- qqq TODO: order of method-declaration doesn't matter -->
@@ -219,21 +223,6 @@ MVC: Most of what we used to consider the program goes into the Model. We separa
 
 public vs. private vs. protected
 
-
-class Cell
-  # require_relative 'sudoku'
-  attr_reader :index, :row, :col, :box                                                                              
-  attr_accessor :value, :possibilities
-  def initialize(args={})
-    @index = args.fetch(:index)
-    @value = args.fetch(:value)
-    @row = args.fetch(:row)
-    @col = args.fetch(:col)
-    @box = args.fetch(:box)
-    @possibilities = args.fetch(:possibilities)
-  end
-end
-
 -->
 
 ---
@@ -243,26 +232,38 @@ end
  1. **subclass** class X
 --
 : to make a new class that inherits from class X
+--
+
 
  1. **superclass**
 --
 : parent class
+--
+
 
  1. **`Object`**
 --
 : the ulimate parent of all classes
+--
+
 
  1. **override** a method
 --
 : to replace (entirely) an inherited method
+--
+
 
  1. **OOP**
 --
 : object-oriented programming
+--
+
 
  1. **chaining**
 --
 : partially overriding a method but also inheriting the rest of it, using `super`
+--
+
 
  1. **method lookup**
 --
@@ -273,6 +274,7 @@ end
 --
 _at the moment it is to be executed_ (rather than when the code is parsed)
 --
+
 
  1. **constructor**
 --
