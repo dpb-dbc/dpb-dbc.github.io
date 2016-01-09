@@ -30,14 +30,34 @@ class: center, middle
 
 # What these slides cover
 
- 1. qqq
+ 1. Tagging the Current Commit
+--
 
+
+ 1. Pushing Tags to a Remote Repository
+--
+
+
+ 1. What do Tags Look Like on GitHub?
+--
+
+
+ 1. Checking Out a Tagged Commit
+--
+
+
+ 1. Fancier Tags
+--
+
+
+ 1. Tagging a Past Commit or Deleting an Existing Tag
+--
+
+
+ 1. Documentation and Glossary
 ---
 
-
-
-
-## Tagging the current commit
+## Tagging the Current Commit
 
 Once you are satisfied that your current commit represents a significant release or stage in your project's development, you can assign it a "tag". 
 --
@@ -50,9 +70,12 @@ Normally the tag is a version (such as "v0.1") or release number ("release 0"), 
 (Below I've used `$` to stand for your command-line prompt — don't type it. If the tagging is successful, Git makes no reply.)
 --
 
-```ruby
+```git
 $ git tag release_0
 ```
+--
+
+This is called a "lightweight" tag, because it contains no information beyond the tag-name and the associated commit-hash.
 ---
 ## Pushing Tags to a Remote Repository
 --
@@ -61,7 +84,7 @@ $ git tag release_0
 You can push a single tag to the remote repository like this:
 --
 
-```bash
+```git
 $ git push origin release_0
 Total 0 (delta 0), reused 0 (delta 0)
 To git@github.com:account_name/repo_name.git
@@ -72,7 +95,7 @@ To git@github.com:account_name/repo_name.git
 Or you can push all tags in the current reponsitory at once:
 --
 
-```bash
+```git
 $ git push origin --tags
 ```
 --
@@ -80,86 +103,213 @@ $ git push origin --tags
 Now view your tags:
 --
 
-```bash
+```git
 $ git tag
 ```
-
 
 ---
 
 ## What do Tags Look Like on GitHub?
-
-qqq
-
-![Git tags on GitHub](images/git_tags_on_github.png)
-
-## Checking Out a Tag
-
-qqq
-
----
-## Including a tag-message
 --
 
-```bash
-$ git tag -a release_1 -m "Release 1"
+
+In the upper left corner of a GitHub repository page is a drop-down menu that lets you select different branches.
+--
+
+
+Once it's open, you'll find a tab labelled "Tags". click on that and you'll see any tags that have been pushed to GitHub:
+--
+
+
+![Git tags on GitHub](images/git_tags_on_github.png)
+--
+
+
+and you can choose one.
+
+---
+
+## Checking Out a Tagged Commit
+--
+
+
+Only commits can be checked out, not tags. 
+--
+
+A branch can be checked out because a branch is simply a label for a particular commit. 
+--
+
+But a branch is a moveable label — it always points to the newest commit in a tree (unless you move it to point somewhere else). A tag is not moveable at all.
+--
+
+
+If you try to checkout a tag, you will end up in "detached HEAD" state, which means you are not in any branch at all.
+--
+
+
+However, you can create and checkout a branch that corresponds to a particular tag:
+
+```git
+$ git checkout -b <branch-name> <tag-name>
 ```
 --
 
-(There is nothing for tagging that corresponds to `git commit -v` for verbose tag-messaging.)
+Here we are creating a new branch named `<branch-name>` that points to the commit tagged `<tag-name>`, and checking the new branch out as sono as it comes into being.
 --
 
 
-Note that if you've already created a tag, you can't add a tag-message after the fact unless you use `--force`, shorthand `-f`:
+For clarity, I advise not using a branch-name that is identical to a tag-name:
 --
 
-```ruby
+```git
+$ git checkout -b release_0_branch release_0
+```
+
+---
+## Fancier Tags
+--
+
+Tags that are not considered "lightweight" may have an "annotation" or be signed with a GPG key. Here I cover annotation:
+--
+
+```git
+$ git tag -a release_1
+```
+--
+
+Git will now open your default editor and let you annotate the tag with a "tag message". 
+--
+
+An empty message will abort the act of tagging.
+--
+
+
+Alternately, you can include the message in the same line as the annotation:
+--
+
+```git
+$ git tag -a release_1 -m "Yes and this is Release 1"
+```
+--
+
+(In this case there is nothing for tagging that corresponds to `git commit -v` for verbose tag-messaging, so you have to use `-m`.)
+---
+## Fancier Tags, cont'd
+--
+
+
+Note that if you've already created a tag, you can't annotate it after the fact: 
+--
+
+```git
 $ git tag -a release_1
 $ git tag -a release_1 -m "Release 1"
 fatal: tag 'release_1' already exists
+```
+--
+unless you use `--force`, shorthand `-f`:
+
+```git
 $ git tag -a release_1 -f -m "Release 1"
 Updated tag 'release_1' (was e09fc29)
 ```
+--
+
+If you have already pushed the earlier tag, you may also have to force-push:
+--
+
+
+```git
+$ git push -f --tags
+```
 ---
 
-## Tag a past commit
+## Tagging a Past Commit or Deleting an Existing Tag
 
-You have to name its commit-hash explicitly:
+To add a tag to a past commit, you have to name its commit-hash explicitly:
 
-```bash
+```git
 $ git tag -a release_0 e09fc29
 ```
+--
 
+
+To delete a past commit (which you may want to do before revising its name or tag-message):
+--
+
+```git
+$ git tag -d release_0
+Deleted tag 'release_0' (was e09fc29)
+```
+--
+
+If you do this, how do you delete the same tag on the remote server? Just using `git push --tags` won't do anything. 
+--
+
+
+Instead, prepend a colon to the tag-name:
+--
+
+```git
+$ git push origin :release_0
+To git@github.com:account_name/repo_name.git
+ - [deleted]         release_0
+```
 ---
 
-## Documentation
+## Documentation and Glossary
 --
 
 
 See the man page at
 
-```bash
+```git
 $ git help tag
 ```
 
-This contains discussion on altering a past tag, under "On Re-tagging".
+This contains discussion on altering a past tag, under "On Re-tagging", and a number of other matters of interest.
+--
 
 
-[end]
+There is also a useful glossary of Git terminology on the [Git home site](https://git-scm.com/docs/gitglossary). You can access the same content at the command line with
+--
 
+```git
+man gitglossary
+```
 ---
 
 ## Terminology Review
 
- 1. **qqq**
+ 1. **tag**
 --
-: qqq
+: a non-moveable label for a Git commit
 --
 
+
+ 1. **lightweight**
+--
+: describes a tag that doesn't have an annotation and isn't GPG-signed
+--
+
+
+ 1. **annotation**
+--
+: a tag-message
+--
+
+
+ 1. **branch**
+--
+: a moveable label for a Git commit
+--
+
+
+ 1. **detached HEAD state**
+--
+: the state of having one's HEAD pointing to a commit that isn't the tip of a branch
 
 ---
-
-
 
 class: center, middle
 
