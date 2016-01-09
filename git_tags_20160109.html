@@ -79,7 +79,9 @@ $ git tag release_0
 ```
 --
 
-This is called a "lightweight" tag, because it contains no information beyond the tag-name and the associated commit-hash.--
+This is called a "lightweight" tag, because it contains no information beyond the tag-name and the associated commit-hash.
+--
+
 
 Now view your tag or tags:
 --
@@ -148,11 +150,11 @@ But a branch is a moveable label — it always points to the newest commit in a 
 --
 
 
-If you try to checkout a tag, you will end up in "detached HEAD" state, which means you are not in any branch at all.
+If you try to check out a tag, you will end up in "detached HEAD" state, which means you are not in any branch at all.
 --
 
 
-However, you can create and checkout a branch that corresponds to a particular tag:
+However, you can create and check out a branch that corresponds to a particular tag:
 --
 
 ```git
@@ -160,7 +162,7 @@ $ git checkout -b <branch-name> <tag-name>
 ```
 --
 
-Here we are creating a new branch named `<branch-name>` that points to the commit tagged `<tag-name>`, and checking the new branch out as soon as it comes into being.
+Here we are creating a new branch named `<branch-name>` that points to the commit tagged `<tag-name>`, and checking that new branch out as soon as it comes into being.
 --
 
 
@@ -198,7 +200,7 @@ $ git tag -a release_1 -m "Yes and this is Release 1"
 ```
 --
 
-(In this case there is nothing for verbose tag-messaging that would correspond to `git commit -v` for verbose commit-messaging, so you have to use `-m`.)
+(In this case there is nothing for verbose tag-messaging that would correspond to `git commit -v` for verbose commit-messaging. You just have to use `-m`.)
 ---
 ## Fancier Tags, cont'd
 --
@@ -221,7 +223,7 @@ Updated tag 'release_1' (was e09fc29)
 ```
 --
 
-If you have already pushed the earlier tag, you may also have to force-push:
+If you have already pushed the earlier tag to your remote repository, you may also have to force-push:
 --
 
 
@@ -252,7 +254,7 @@ Deleted tag 'release_0' (was e09fc29)
 ```
 --
 
-If you do this, then how do you delete the same tag on the remote server? Just using `git push --tags` won't have any effect. 
+If you do this, then how do you follow up and delete the same tag on the remote server? Just using `git push --tags` won't have any effect. 
 --
 
 
