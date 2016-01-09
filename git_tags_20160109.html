@@ -235,6 +235,7 @@ $ git push -f --tags
 
 
 To add a tag to a past commit, you have to name its commit-hash explicitly:
+--
 
 ```git
 $ git tag -a release_0 e09fc29
@@ -251,7 +252,7 @@ Deleted tag 'release_0' (was e09fc29)
 ```
 --
 
-If you do this, how do you delete the same tag on the remote server? Just using `git push --tags` won't do anything. 
+If you do this, then how do you delete the same tag on the remote server? Just using `git push --tags` won't have any effect. 
 --
 
 
