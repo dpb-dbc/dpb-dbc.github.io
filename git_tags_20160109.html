@@ -79,14 +79,22 @@ $ git tag release_0
 ```
 --
 
-This is called a "lightweight" tag, because it contains no information beyond the tag-name and the associated commit-hash.
+This is called a "lightweight" tag, because it contains no information beyond the tag-name and the associated commit-hash.--
+
+Now view your tag or tags:
+--
+
+```git
+$ git tag
+```
+
 ---
 
 ## Pushing Tags to a Remote Repository
 --
 
 
-You can push a single tag to the remote repository like this:
+You can push a single tag to the remote repository by name, like this:
 --
 
 ```git
@@ -102,14 +110,6 @@ Or you can push all tags in the current reponsitory at once:
 
 ```git
 $ git push origin --tags
-```
---
-
-Now view your tags:
---
-
-```git
-$ git tag
 ```
 
 ---
@@ -153,17 +153,18 @@ If you try to checkout a tag, you will end up in "detached HEAD" state, which me
 
 
 However, you can create and checkout a branch that corresponds to a particular tag:
+--
 
 ```git
 $ git checkout -b <branch-name> <tag-name>
 ```
 --
 
-Here we are creating a new branch named `<branch-name>` that points to the commit tagged `<tag-name>`, and checking the new branch out as sono as it comes into being.
+Here we are creating a new branch named `<branch-name>` that points to the commit tagged `<tag-name>`, and checking the new branch out as soon as it comes into being.
 --
 
 
-For clarity, I advise not using a branch-name that is identical to a tag-name:
+For clarity, I advise _not_ using a branch-name that is identical to a tag-name:
 --
 
 ```git
@@ -185,7 +186,7 @@ $ git tag -a release_1
 Git will now open your default editor and let you annotate the tag with a "tag message". 
 --
 
-An empty message will abort the act of tagging.
+As with commit messages, an empty message here will abort the act of tagging.
 --
 
 
@@ -197,13 +198,13 @@ $ git tag -a release_1 -m "Yes and this is Release 1"
 ```
 --
 
-(In this case there is nothing for tagging that corresponds to `git commit -v` for verbose tag-messaging, so you have to use `-m`.)
+(In this case there is nothing for verbose tag-messaging that would correspond to `git commit -v` for verbose commit-messaging, so you have to use `-m`.)
 ---
 ## Fancier Tags, cont'd
 --
 
 
-Note that if you've already created a tag, you can't annotate it after the fact: 
+Also note that if you've already created a tag, you can't annotate it after the fact: 
 --
 
 ```git
@@ -269,10 +270,12 @@ To git@github.com:account_name/repo_name.git
 
 
 See the man page at
+--
 
 ```git
 $ git help tag
 ```
+--
 
 This contains discussion on altering a past tag, under "On Re-tagging", and a number of other matters of interest.
 --
