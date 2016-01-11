@@ -197,30 +197,32 @@ end
 ```
 --
 
-![One-to-one Relationship](images/one-to-one-relationship.png)
+![One-to-one Relationship](images/one-to-one-relationship.png)   =>   ![Tasks](images/tasks_one-to-one-relationship.png)
 --
 
 
+We will name it `Tasks` — notice that it's plural! 
+--
 In other words:
 --
 
 
-| Object-Oriented Programming | | | | | Relational Database | | | Function |
-|:---------------------------:| | | | | :------------------:| | |:-:|
-| class                       | | | | |  table              | | |  blueprint |
-| object                      | | | | |  record             | | | instance |
-| attribute                   | | | | |  field              | | |  piece of data |
+| Object-Oriented Programming | | | | | Relational Database  | | | Function |
+|:---------------------------:| | | | | :-------------------:| | |:-:|
+| class (name singular)       | | | | |  table (name plural) | | |  blueprint |
+| object                      | | | | |  record              | | | instance |
+| attribute                   | | | | |  field               | | |  piece of data |
 
 ---
 
 ### How do We Represent a Schema, cont'd
 
 
-So we have a `Task` table:
+So we have a `Tasks` table (again, the convention is for it to be plural):
 --
 
 
-![Task](images/task_one-to-one-relationship.png)
+![Task](images/tasks_one-to-one-relationship.png)
 --
 
 
@@ -228,11 +230,11 @@ Our to-do list project also had a `TodoList` class, so let's create one.
 --
 
 
-We will get a TodoList table, and that table will have a field corresponding to the `tasks` attribute in the `TodoList` class (the attribute was 	probably an array) that allows us to assign multiple `Task` instances to a single `TodoList`.
+We will get a `TodoLists` table, and that table will have a field corresponding to the `tasks` attribute in the `TodoList` class (the attribute was probably an array) that allows us to assign multiple `Task` instances to a single `TodoList`.
 --
 
 
-![TodoList](images/todolist_one-to-one-relationship.png)
+![TodoList](images/todolists_one-to-one-relationship.png)
 --
 
 
@@ -249,7 +251,7 @@ An ID turns out to be the key to making relationships between tables.
 --
 
 
-In the Ruby to-do list, we probably instantiated `Task` objects and stored them in a `TodoList.tasks` attribute (an array).
+In the Ruby to-do list, one way to implement it was to instantiate `Task` objects and then store them in a `TodoList.tasks` attribute (an array).
 --
 
 ```ruby
@@ -262,11 +264,19 @@ end
 ```
 --
 
-![TodoList](images/todolist_one-to-one-relationship.png)
+![TodoList](images/todolists_one-to-one-relationship.png)
 --
 
 
-The field `TodoList.task_id` is the table's way of saying that `Task` records, each represented by a `Task.id`, can be placed in a `TodoList` record, in the same way `Task` objects could be inserted into the array `TodoList.tasks` in the Ruby project.
+(**Plural name!**, even though the class-name was singular!) 
+--
+The field `TodoLists.task_id` is the table's way of hinting that `Tasks` records
+--
+, each represented by a `Tasks.id`
+--
+, can be placed in a `TodoLists` record
+--
+, in the same way `Task` objects could be inserted into the array `TodoList.tasks` in the Ruby project.
 ---
 
 ### How do We Represent a Schema, cont'd
@@ -276,7 +286,7 @@ Here is how we state the relationship between those things in a relational datab
 --
 
 
-![TodoList to Tasks](images/todolist-to-tasks_one-to-many-relationship.png)
+![TodoList to Tasks](images/todolists-to-tasks_one-to-many-relationship.png)
 --
 
 
@@ -288,7 +298,7 @@ If room is made for it in another table, it is called a **foreign key** in that 
 --
 
 
-(These diagrams are made with the [UML Tool of Ondřej Žára](http://ondras.zarovi.cz/sql/demo/), code at https://github.com/ondras/wwwsqldesigner; Dev Bootcamp has a clone [here](https://schemadesigner.devbootcamp.com/).)
+(By the by, these diagrams are made with the [UML Tool of Ondřej Žára](http://ondras.zarovi.cz/sql/demo/), code at https://github.com/ondras/wwwsqldesigner; Dev Bootcamp has a clone [here](https://schemadesigner.devbootcamp.com/).)
 --
 
 
@@ -300,11 +310,11 @@ If room is made for it in another table, it is called a **foreign key** in that 
 --
 
 
-In order to decide that, we always must ask: 
+In order to decide how any two tables are related, we always must ask: 
 --
 
 
-of categories X and Y, 
+of the categories X and Y that the tables represent, 
 --
 
  * how many of X can Y have? 
@@ -317,6 +327,13 @@ and
 ---
 
 ### How Are Tables Related to One Another? (cont'd)
+
+
+ 1. **One-to-one** relationship
+--
+
+
+    * Normally everything is in one table, which is named as a **plural noun**: `Tasks`, `TodoLists`, `People`, `Numbers`, `Brokers`, `Customers`.
 
 
  1. **One-to-many** relationship
@@ -336,22 +353,18 @@ and
     * Example: people and phone numbers. 
 --
 
-    * We are not allowed simply to connect two tables directly as many-to-many. We need a third table — a **join table** or junction table — to model this. **The relationship itself gets a special table.**
+    * We are **not allowed simply to connect two tables directly** if they are many-to-many. 
+--
+We need a third table — a **join table** or junction table — to model this. 
+--
+**The relationship itself gets a special table.**
 --
 
-    * Join tables should contain the names of both tables being joined.
---
-
- 1. **One-to-one** relationship
---
-
-
-    * In a one-to-one relationship, normally everything goes into one table.
+    * Join tables are named **as the combined singular noun-forms** of the tables being joined: from `People` and `Numbers` we make **`Person_Number`**.
 
 ---
 
 ### How Are Tables Related to One Another? (cont'd)
---
 
 
 More examples — try and categorize them
@@ -394,7 +407,7 @@ More examples — try and categorize them
 
 ### Other Resources
 
-I like the [TekstenUitleg](http://en.tekstenuitleg.net/articles/software/database-design-tutorial) database-design tutorial for its clear explanations.
+I like the [TekstenUitleg](http://en.tekstenuitleg.net/articles/software/database-design-tutorial) database-design tutorial for its clear explanations. It seems to be written by someone named Ruben van Loen (accessed 20160110).
 
 [end]
 
@@ -422,11 +435,15 @@ I like the [TekstenUitleg](http://en.tekstenuitleg.net/articles/software/databas
 --
 : a relationship in which one table contains as foreign key the ID of another
 --
+. A non-join table is customarily named as a plural noun.
+--
 
 
  1. **many-to-many**
 --
 : a relationship requiring a join table connecting two other tables
+--
+. Join-tables are customarily named by combining singular nouns: `Author_Book`, `Person_Parent`.
 --
 
 
@@ -434,9 +451,10 @@ I like the [TekstenUitleg](http://en.tekstenuitleg.net/articles/software/databas
 --
 : a model of data, showing relationships between different tables and their fields
 --
+. Trivia item: the traditional Greek plural of this word is _schemata_, although we normally say _schemas_ in English.
 
 
- 1. **persist**:
+ 1. **persist**
 --
 : (transitive verb): to cause to persist, to make permanent
 --
