@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <!-- Template from https://github.com/gnab/remark, 20151228 -->
+    <title>Title</title>
+    <meta charset="utf-8">
+    <style>
+      @import url(https://fonts.googleapis.com/css?family=Yanone+Kaffeesatz);
+      @import url(https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic);
+      @import url(https://fonts.googleapis.com/css?family=Ubuntu+Mono:400,700,400italic);
+
+      body { font-family: 'Droid Serif'; }
+      h1, h2, h3 {
+        font-family: 'Yanone Kaffeesatz';
+        font-weight: normal;
+      }
+      .remark-code, .remark-inline-code { font-family: 'Ubuntu Mono'; }
+    </style>
+  </head>
+  <body>
+    <textarea id="source">
+
+class: center, middle
+
+# Core Concepts of DB Schema Design
+## David Branner, Dev Bootcamp
+### 20160111
+
+---
+
+### What these slides cover
+
+ 1. "Persisting" (Storing and Retrieving) Data
+--
+
+
+ 1. Getting from a CSV File to a Database
+--
+
+
+ 1. Schema
+--
+
+
+ 1. How do We Represent a Schema?
+--
+
+
+ 1. How Are Tables Related to One Another?
+--
+
+
+ 1. Other Resources
+---
+
+### "Persisting" (Storing and Retrieving) Data
+--
+
+
+For this you will encounter several different methods:
+--
+
+
+ 1. text files
+--
+
+
+    * plain text, CSV, other separators
+--
+
+ 1. databases
+--
+
+    * SQL, ActiveRecord
+--
+
+ 1. JSON
+--
+: a format (native to JavaScript) of great importance on the web
+--
+
+
+People use the expression "Create-Read-Update-Delete" ("CRUD") to describe the basic capabilities of a database.
+---
+
+### Getting from a CSV File to a Database
+
+Take a look at part of a `.csv` file that might be from your To-do List challenge:
+--
+
+
+```text
+1,Walk the cat
+2,Go to the gym
+3,Buy groceries for the week
+4,Call Penelope
+5,Finish code challenge
+```
+--
+
+In the Ruby program, each of those lines became one instance of the `Task` class (or something similarly named).
+--
+
+
+A single line of information in a CSV file is called a "record" and typically corresponds to a single instance of some class in the program that reads the file.
+
+---
+### Schema
+
+--
+
+
+A "schema" is a data model.
+--
+
+
+One of the key things we do when designing a schema is to decide how different things are going to be related to each other.
+--
+
+
+To-do list — what did the data consist of (in the early versions of the challenge)?
+--
+
+
+ * ID number
+--
+
+
+ * task
+--
+
+
+Each ID number had one task associated with it, and each task had one ID number associated with it.
+--
+
+
+That kind of relationship is called "one-to-one". 
+--
+
+
+One task corresponds to one ID, and one ID corresponds to one task.
+--
+
+
+We also had a "completed" attribute. One task, one ID, one value (`true`/`false`) for the "completed" attribute.
+---
+
+### How do We Represent a Schema and the Relationships that Make It Up?
+--
+
+
+We use the Unified Modeling Language (**UML**, dating from mid-1990s) diagrams to model this. 
+--
+The relationship we are talking about (to-do list tasks) looks like this in UML:
+--
+
+
+![One-to-one Relationship](images/one-to-one-relationship.png)
+--
+
+
+This diagram represents a "table" in a relational database. 
+--
+
+
+A table in a relational database corresponds to a class in object-oriented programming. 
+--
+Here, it corresponds to our `Task` class.
+--
+
+
+The horizontal divisions are the "fields" or "columns". 
+--
+
+
+One task field corresponds to one ID field, and one ID field corresponds to one task field. 
+--
+
+
+Fields correspond to attributes in object-oriented programming.
+---
+
+### How do We Represent a Schema, cont'd
+
+
+Let's compare the class and the table:
+--
+
+```ruby
+class Task
+  attr_accessor :id, :task, :completed
+  def initialize(args={})
+    @task = args.fetch(:task, nil)
+    @completed = args.fetch(:completed, false)
+  end
+end
+```
+--
+
+![One-to-one Relationship](images/one-to-one-relationship.png)
+--
+
+
+In other words:
+--
+
+
+| Object-Oriented Programming | | | | | Relational Database | | | Function |
+|:---------------------------:| | | | | :------------------:| | |:-:|
+| class                       | | | | |  table              | | |  blueprint |
+| object                      | | | | |  record             | | | instance |
+| attribute                   | | | | |  field              | | |  piece of data |
+
+---
+
+### How do We Represent a Schema, cont'd
+
+
+So we have a `Task` table:
+--
+
+
+![Task](images/task_one-to-one-relationship.png)
+--
+
+
+Our to-do list project also had a `TodoList` class, so let's create one. 
+--
+
+
+We will get a TodoList table, and that table will have a field corresponding to the `tasks` attribute in the `TodoList` class (the attribute was 	probably an array) that allows us to assign multiple `Task` instances to a single `TodoList`.
+--
+
+
+![TodoList](images/todolist_one-to-one-relationship.png)
+--
+
+
+It also has an ID field, since every table automatically gets its own ID. 
+--
+
+Notice that the field for tasks in this table is called `task_id`.
+---
+
+### How do We Represent a Schema, cont'd
+
+
+An ID turns out to be the key to making relationships between tables. 
+--
+
+
+In the Ruby to-do list, we probably instantiated `Task` objects and stored them in a `TodoList.tasks` attribute (an array).
+--
+
+```ruby
+class TodoList
+  attr_accessor :id, :tasks
+  def initialize(args={})
+    @tasks = args.fetch(:tasks, Array.new)
+  end
+end
+```
+--
+
+![TodoList](images/todolist_one-to-one-relationship.png)
+--
+
+
+The field `TodoList.task_id` is the table's way of saying that `Task` records, each represented by a `Task.id`, can be placed in a `TodoList` record, in the same way `Task` objects could be inserted into the array `TodoList.tasks` in the Ruby project.
+---
+
+### How do We Represent a Schema, cont'd
+
+
+Here is how we state the relationship between those things in a relational database context:
+--
+
+
+![TodoList to Tasks](images/todolist-to-tasks_one-to-many-relationship.png)
+--
+
+
+A table's ID number is normally used as its "**primary key**" — by which individual records are accessed.
+--
+
+
+If room is made for it in another table, it is called a **foreign key** in that table, and it enables us to work the relationship between the two tables.
+--
+
+
+(These diagrams are made with the [UML Tool of Ondřej Žára](http://ondras.zarovi.cz/sql/demo/), code at https://github.com/ondras/wwwsqldesigner; Dev Bootcamp has a clone [here](https://schemadesigner.devbootcamp.com/).)
+--
+
+
+(Notice the use of the "Save/Load" button. This enables you to store your schema in **reproducible form** as XML. I'll try to remember to illustrate that. But in your challenges, DBC generally asks you only to submit a screenshot.)
+
+---
+
+### How Are Tables Related to One Another?
+--
+
+
+In order to decide that, we always must ask: 
+--
+
+
+of categories X and Y, 
+--
+
+ * how many of X can Y have? 
+--
+and 
+
+
+ * how many of Y can X have?
+
+---
+
+### How Are Tables Related to One Another? (cont'd)
+
+
+ 1. **One-to-many** relationship
+--
+
+
+    * Example: real estate brokers and customers. One broker may have many customers, but (under the rules of our imaginary company) no customer is allowed to work with more than one broker at once.
+--
+
+    * **Foreign key** accesses the ID (primary key) of another table.
+--
+
+ 1. **Many-to-many** relationship
+--
+
+
+    * Example: people and phone numbers. 
+--
+
+    * We are not allowed simply to connect two tables directly as many-to-many. We need a third table — a **join table** or junction table — to model this. **The relationship itself gets a special table.**
+--
+
+    * Join tables should contain the names of both tables being joined.
+--
+
+ 1. **One-to-one** relationship
+--
+
+
+    * In a one-to-one relationship, normally everything goes into one table.
+
+---
+
+### How Are Tables Related to One Another? (cont'd)
+--
+
+
+More examples — try and categorize them
+--
+
+
+ * word : reversal_of_word
+--
+
+ * bookstore : book
+--
+
+ * heads : tails
+--
+
+ * person : phone_number
+--
+
+ * dog-walkers : dogs
+--
+
+ * person : social_security_number
+--
+
+ * author : book
+--
+
+ * bank customer : bank product
+--
+
+ * person : parent_of_person
+--
+
+ * person : last_name
+--
+
+ * hotel : guest
+
+---
+
+### Other Resources
+
+I like the [TekstenUitleg](http://en.tekstenuitleg.net/articles/software/database-design-tutorial) database-design tutorial for its clear explanations.
+
+[end]
+
+
+
+---
+
+## Terminology Review
+--
+
+
+ 1. **primary key**
+--
+: the ID of a table — it is normally an integer
+--
+
+
+ 1. **foreign key**
+--
+: the ID of some other table, when used in our table — also an interger
+--
+
+
+ 1. **one-to-many**
+--
+: a relationship in which one table contains as foreign key the ID of another
+--
+
+
+ 1. **many-to-many**
+--
+: a relationship requiring a join table connecting two other tables
+--
+
+
+ 1. **schema**
+--
+: a model of data, showing relationships between different tables and their fields
+--
+
+
+ 1. **persist**:
+--
+: (transitive verb): to cause to persist, to make permanent
+--
+
+
+ 1. **CRUD**
+--
+: acronym for the four basic functions a database (or other forms of persistent storage) can perform: **C**reate, **R**ead, **U**pdate, **D**elete.
+---
+
+class: center, middle
+
+## END
+
+    </textarea>
+    <script src="https://gnab.github.io/remark/downloads/remark-latest.min.js">
+    </script>
+    <script>
+      var slideshow = remark.create();
+    </script>
+
+<!-- From http://joshbode.github.io/remark/ansi.html#3, 20151229 -->
+    <script src="http://gnab.github.io/remark/downloads/remark-latest.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script type="text/javascript">
+      var hljs = remark.highlighter.engine;
+    </script>
+    <script src="terminal.language.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      var slideshow = remark.create({
+        highlightStyle: 'solarized_dark'
+      });
+      // extract the embedded styling from ansi spans
+      $('code.terminal > span.hljs-ansi').replaceWith(function(i, x) {
+        return x.replace(/<(\/?(\w+).*?)>/g, '<$1>')
+      });
+    </script>
+  </body>
+</html>
