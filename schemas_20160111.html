@@ -50,6 +50,14 @@ class: center, middle
 --
 
 
+ 1. How Are Tables Related to Classes?
+--
+
+
+ 1. Persisting a Schema for Later Reference
+--
+
+
  1. Other Resources
 ---
 
@@ -405,12 +413,142 @@ More examples — try and categorize them
 
 ---
 
+### How Are Tables Related to Classes?
+--
+
+| Object-Oriented Programming | | | | | Relational Database  | | | Function |
+|:---------------------------:| | | | | :-------------------:| | |:-:|
+| class (name singular)       | | | | |  table (name plural) | | |  blueprint |
+| object                      | | | | |  record              | | | instance |
+| attribute                   | | | | |  field               | | |  piece of data |
+--
+
+
+**One-to-one Relationship**:
+
+![Tasks](images/tasks_one-to-one-relationship.png)
+--
+
+
+```ruby
+class Task                                     # = table Tasks
+  attr_accessor :id, :task, :completed
+  def initialize(args={})
+    @task = args.fetch(:task, nil)             # = column Tasks.task
+    @completed = args.fetch(:completed, false) # = column Tasks.completed
+  end
+end
+```
+
+---
+#### How Are Tables Related to Classes? (cont'd) — one-to-many relationship
+
+
+![TodoList to Tasks](images/todolists-to-tasks_one-to-many-relationship.png)
+--
+
+```ruby
+class Task                                     # = table Tasks
+  attr_accessor :id, :task, :completed
+  def initialize(args={})
+    @task = args.fetch(:task, nil)             # = column Tasks.task
+    @completed = args.fetch(:completed, false) # = column Tasks.completed
+  end
+end
+
+class TodoList                                 # = table TodoLists
+  attr_accessor :id, :tasks
+  def initialize(args={})
+    @tasks = args.fetch(:tasks, Array.new)     # = column TodoLists.task_id
+  end
+  
+  def add_task(task)
+    @tasks << task                             # implied by TodoLists.task_id
+  end
+end
+```
+---
+
+#### How Are Tables Related to Classes? (cont'd) — many-to-many (simplified!)
+
+
+![Person_Task Join Table](images/people-to-person_task-to-tasks_many-to-many-relationship.png)
+--
+
+```ruby
+class Task                                     # = table Tasks
+  attr_accessor :id, :item, :people
+  def initialize(args={})
+    @item = args.fetch(:item, nil)             # = column Tasks.item
+    @people = Array.new                        # implied by Person_Task.person_id
+  end
+  def add_person(person)
+    @people << person                          # implied by Person_Task.person_id
+  end
+end
+
+class Person                                   # = table People
+  attr_accessor :id, :name, :tasks
+  def initialize(args={})
+    @name = args.fetch(:name, nil)             # = column TodoLists.name
+    @tasks = Array.new                         # implied by Person_Task.task_id
+  end
+  def add_task(task)
+    @tasks << task                             # implied by Person_Task.task_id
+  end
+end
+```
+---
+### Persisting a Schema for Later Reference
+
+Here is the window that opens to generate XML for your schema:
+
+![XML for Person_Task Join Table](images/xml_for_people-to-person_task-to-tasks_many-to-many-relationship.png)
+---
+### Persisting a Schema for Later Reference, cont'd
+
+
+Dev Bootcamp challenges will normally require you to submit a screenshot of your schema. 
+--
+
+
+But you can't modify your work later, or share it with collaborators for editing, if all you have is a screenshot.
+--
+
+
+So I recommend generating the XML for your schema and storing it.
+--
+
+
+Remember to use the original [UML Tool of Ondřej Žára](http://ondras.zarovi.cz/sql/demo/) for this
+--
+ — the Dev Bootcamp clone is not up to date as of this writing and the XML functionality doesn't work perfectly.
+--
+
+
+To generate the code, click the "Save / Load" button at upper right, then "Save XML" in the modal that opens. 
+--
+The code should appear in the large text box at the bottom of the modal
+--
+ — I just copy and paste into a file. 
+--
+You'll see other options — trying them would be a good way to learn what they do.
+--
+
+
+Here is a [link to the code used in these slides](code/people-to-person_task-to-tasks_many-to-many-relationship.xml).
+
+---
+
 ### Other Resources
+--
 
-I like the [TekstenUitleg](http://en.tekstenuitleg.net/articles/software/database-design-tutorial) database-design tutorial for its clear explanations. It seems to be written by someone named Ruben van Loen (accessed 20160110).
 
-[end]
+I like the [TekstenUitleg](http://en.tekstenuitleg.net/articles/software/database-design-tutorial) database-design tutorial for its clear explanations. 
+--
 
+
+It was written by Ruben van Loen (accessed 20160110).
 
 
 ---
