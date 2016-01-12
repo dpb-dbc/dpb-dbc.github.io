@@ -472,6 +472,39 @@ end
 #### How Are Tables Related to Classes? (cont'd) — many-to-many (simplified!)
 
 
+For illustrating the many-to-many relationship, I'm going to simplify things in order to make things clearer and also to get everything to fit on one slide.
+--
+
+
+ 1. Add a `Person` class and a `People` table, creating a need for a join table in order to embody the many-to-many relationship.
+--
+
+
+ 1. Change the `TodoLists` table to a proper join table, named `Person_Task`.
+--
+
+
+ 1. Change the text of each `Task` object from `Task.task` to `Task.item`, so that we don't get confused over what `task` refers to in different contexts.
+--
+
+
+ 1. Delete the `Task.completed` and its corresponding `Tasks.completed` column, to make space on the slide.
+--
+
+
+So the schema now looks like this:
+--
+
+
+![Person_Task Join Table](images/people-to-person_task-to-tasks_many-to-many-relationship.png)
+--
+
+And the code looks like this (sorry for the cramped slide!):
+---
+
+#### How Are Tables Related to Classes? (cont'd) — many-to-many (simplified!)
+
+
 ![Person_Task Join Table](images/people-to-person_task-to-tasks_many-to-many-relationship.png)
 --
 
@@ -499,6 +532,21 @@ class Person                                   # = table People
 end
 ```
 ---
+
+#### How Are Tables Related to Classes? (cont'd) — many-to-many (simplified!)
+--
+
+
+    
+
+### Make sure you understand how every part of this code is related to every part of the schema, and vice versa.
+--
+
+    
+
+## Much of the work you will do in coming weeks depends on your understanding of that one slide.
+
+---
 ### Persisting a Schema for Later Reference
 
 Here is the window that opens to generate XML for your schema:
@@ -520,7 +568,11 @@ So I recommend generating the XML for your schema and storing it.
 --
 
 
-Remember to use the original [UML Tool of Ondřej Žára](http://ondras.zarovi.cz/sql/demo/) for this
+I recommend this for your own convenience — Dev Bootcamp will still require you to submit a screenshot.
+--
+
+
+Remember to use the original [UML Tool of Ondřej Žára](http://ondras.zarovi.cz/sql/demo/) for generating schemata
 --
  — the Dev Bootcamp clone is not up to date as of this writing and the XML functionality doesn't work perfectly.
 --
