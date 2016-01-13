@@ -57,7 +57,7 @@ A mapping means a correspondence — one thing corresponds, item-by-item, to ano
 --
 
 
-In this case we are talking about Ruby classes ("object") and database tables ("relations").
+In this case we are talking about Ruby classes ("objects") and database tables ("relations").
 --
 
 
@@ -118,7 +118,7 @@ We are in **MVC territory**: the **`app`** directory contains separate subdirect
 --
 
 
-**`spec`**: notice that we are preparing mainly for tests of `model` classes:
+**`spec`**: notice that in this case we are preparing mainly for tests of `model` classes:
 
 ```tree
 └── spec
@@ -148,7 +148,7 @@ Fixtures often serve to ensure test-independence.
 
 **`lib`**: utility programs go here
 --
- — for instance, a program to load data from a file into the database
+ — for instance, this is a program to load data from a file into the database
 --
 
 ```tree
@@ -173,7 +173,7 @@ Fixtures often serve to ensure test-independence.
 --
 
 
- * `seeds.rb`: a program to get starting data into the datavase
+ * `seeds.rb`: a program to get starting data into the database
 --
 
 
@@ -183,8 +183,10 @@ Fixtures often serve to ensure test-independence.
 --
 
 
-   Migration means modifying a schema — including adding, modifying, or dropping tables. 
+   Migrate means modify a schema — adding/modifying/dropping tables. 
 --
+
+
 `db` may also contain databases for the project. 
 ---
 
@@ -503,7 +505,7 @@ bundle exec rake db:seed
 --
 
 ```ruby
-bundle exec rake db:drop
+bundle exec rake db:rollback
 ```
 --
 
