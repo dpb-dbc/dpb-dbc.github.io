@@ -124,7 +124,7 @@ The `CSV` class converts each comma-separated item to a discrete element in the 
 ## Two Basic Recipes for Dealing with CSV Files: Output
 --
 
-For output, I first create an array of hashes, and then pass each hash in turn to a `CSV` writer-object, also passing an output-filename and the string `'wb'` to it for writing in bytes:
+For output, I first create an array of hashes, and then pass each hash in turn to a `CSV` writer-object (called `csv` here), also passing an output-filename and the string `'wb'` to it for writing in bytes:
 
 ```ruby
 items = [{first: 'primero', second: 'segundo', third: 'tercera'},
@@ -137,6 +137,10 @@ CSV.open('output.csv', 'wb') do |csv|
 end
 ```
 --
+
+Notice that the `CSV` object takes an array as input. If you wish to pass a single string to the `CSV` object, you must place it into an array: `csv << [ item ]`.
+--
+
 
 For comparison, here's the content of the output file `output.csv`:
 --
