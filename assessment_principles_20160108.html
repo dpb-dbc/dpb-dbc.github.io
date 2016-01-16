@@ -124,94 +124,51 @@
 
 class: center, middle
 
-# Case
+# Assessment Issues
 ## David Branner, Dev Bootcamp
-### 20151229
+### 20160111
 
 ---
 
-Just a couple of points:
---
+### Classes
 
+ 1. **Write classes**, including a good `initialize` method and some other methods, in order to pass some tests.
 
-First, there's no need to repeat the variable you're testing many times:
---
+    You should be able to write a good class, with
 
+    * argument-order independence
+    * proper use of `fetch` and attributes that have a default value
+    * symbols labelled `attr_accessor` (and related labels)
 
-```ruby
-x = case
-    when y = 'a'
-      'letter a'
-    when y = 'b'; 'letter b'
-    when y = 'c' then 'letter c'
-    else 'who knows?'
-    end
-```
---
+    You should also be able to read a spec and decide what methods and attributes your classes have in order to make all the tests pass.
 
-Instead, put that variable right after `case`:
---
+ 1. **Traverse a collection of data, applying `Enumerable` methods** to it:
 
-```ruby
-x = case y
-    when 'a'
-      'letter a'
-    when 'b'; 'letter b'
-    when 'c' then 'letter c'
-    else 'who knows?'
-    end
-```
+    * Filter out (or in) one or more elements that fulfill some condition.
+    * Sort elements and find where in the sorted array one of them occurs.
+    * Process the collection so that each element is transformed somehow.
+
+ 1. **Refactor code so that it is modular and displays "code re-use"**. That will involve the use of classes (inheritance) and modules (included in other objects), and moving methods around.
 
 ---
 
-Second, you may find good uses for the "case equality operator", `===`.
---
+### SQL
 
+ 1. You are given a database containing at least three tables, and a UML schema to examine.
 
-Between `Fixnum` objects (ordinary numbers), it behaves the same as the regular "equality operator" `==`. 
---
+    **Write and execute various queries** to show or alter specified data.
 
-But it is "overloaded" (given special, contextual meaning) with some classes.
---
-
-
-With `Range` it matches when the variable is within the range:
---
-
-
-```ruby
-population = 80_000
-kind_of_place = case population
-                when 0..1000; "village"
-                when 1001..100_000; "town"
-                when 100_000..Float::INFINITY; "city"
-                # No need for else here, because of Float::INFINITY, above.
-                end
-```
---
-
-
-(Remember — because I put `population` right after `case`, I don't have to write out an explicit `===` operator, but `case` treats it as though it's there, by default.)
---
-
-With classes, `---` identifies an instance of the class:
---
-
-
-```ruby
-a = [1, 2, 3]
-puts case a
-     when String then 'it is a string'
-     when Numeric then "it's a number"
-     when Array then 'we find that it is an array'
-     end
-```
---
-
-
-And there are other examples, too…
+    You will copy the terminal output and paste the results into a file that you submit in your pull-request.
+ 
+ 1. Schema design
+ 
+    You should be proficient at **writing Ruby model-classes and schema diagrams that represent the same relationships**, as part of a MVC project.
+    
+    The classes must imply a relational-database schema containing certain tables, fields, and foreign-key relationships (one-to-many and/or many-to-many), and the schema must imply classes.
 
 ---
+
+
 
 class: center, middle
 
