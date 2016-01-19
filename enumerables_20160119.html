@@ -536,14 +536,14 @@ Possible application: In constructing a cross-word puzzle, you not only want to 
 : Without a following block, this is just ordinary sorting. 
 --
 
-But you can also assign two variables and pass in a special "comparison function", and perform the sort based on the output of that function with the two variables as argument. 
+But you can also pass two arguments to a special "comparison block", and perform the sort based on the output of that block. 
 --
 
 This is an important process that also occurs in other languages, and it's worth learning.
 --
 
 
-A comparison function takes two variables and returns one of the three values -1, 0, and 1, depending on the results of the comparison. 
+A comparison function takes two variables and returns one of the three values -1, 0, and 1, depending on the results of the comparison, as though we were using a case statement with three cases. 
 --
 
 Here are examples using the standard "comparison operator", `<=>`:
@@ -605,14 +605,10 @@ So you can sort strings using `<=>`, and you'll get capitalized before uncapital
 [4] pry(main)> ['abc', 'Abc', 'aBc', 'ABc'].sort {|a,b| a<=>b}
 => ["ABc", "Abc", "aBc", "abc"]
 ```
-
----
-
-### Iterator methods in the `Enumerable` module, …
 --
 
 
-If you want to compare strings without considering differences of case, you can consider the `casecmp` method:
+<!-- -->Digression: If you want to compare strings without considering differences of case, you can consider the `casecmp` method:
 --
 
 ```ruby
@@ -656,6 +652,47 @@ A common application is sorting strings by length:
 --
 
 : Repeating a function that acts over and over on its own last output.
+--
+
+
+`reduce` is the usual name across programming languages generally, but `inject` is the more native Ruby name. 
+--
+(I prefer to stick to more general names, myself.)
+--
+
+
+Here is an example of `reduce` in action: 
+--
+sum the lengths of words in an array:
+--
+
+```ruby
+[1] pry(main)> a = ['array', 'of', 'words', 'having', 'assorted', 'lengths']
+=> ["array", "of", "words", "having", "assorted", "lengths"]
+[2] pry(main)> a.reduce(0) { |sum, word| sum + word.length }
+=> 33
+```
+--
+
+
+What happens:
+--
+
+
+
+ * `reduce(0)` means "start with 0 as your initial value of `sum`.
+--
+
+
+ * `reduce` passes its output to the block `{ |sum, word| sum + word.length }`
+--
+
+
+ * `sum` starts with zero, and each element of the array is passed to `word`
+--
+
+
+ * `sum` is then replaced at each step with the new value of `sum + word.length`.
 
 ---
 
