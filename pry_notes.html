@@ -124,92 +124,174 @@
 
 class: center, middle
 
-# Case
+# Debugging with Pry
 ## David Branner, Dev Bootcamp
-### 20151229
+### 20160107
 
 ---
 
-Just a couple of points:
+# What these slides cover
+
+ 1. What is Pry?
 --
 
 
-First, there's no need to repeat the variable you're testing many times:
+ 1. Tools
 --
 
 
-```ruby
-x = case
-    when y = 'a'
-      'letter a'
-    when y = 'b'; 'letter b'
-    when y = 'c' then 'letter c'
-    else 'who knows?'
-    end
-```
+ 1. Useful commands to learn first
 --
 
-Instead, put that variable right after `case`:
---
 
-```ruby
-x = case y
-    when 'a'
-      'letter a'
-    when 'b'; 'letter b'
-    when 'c' then 'letter c'
-    else 'who knows?'
-    end
-```
+ 1. Debugging with Pry
 
 ---
 
-Second, you may find good uses for the "case equality operator", `===`.
+## What is Pry?
+--
+
+Open-source REPL, alternative to Ruby's built-in Irb, founded by John Mair.
 --
 
 
-Between `Fixnum` objects (ordinary numbers), it behaves the same as the regular "equality operator" `==`. 
---
-
-But it is "overloaded" (given special, contextual meaning) with some classes.
+[Source](https://github.com/pry/pry) | [Website](http://pryrepl.org/) | [Wiki](https://github.com/pry/pry/wiki)
 --
 
 
-With `Range` it matches when the variable is within the range:
+Can be invoked in mid-execution of a program, for debugging.
+
+---
+
+## Useful commands to learn first
 --
 
+ 1. **To exit** (with any new tool, always learn this first!): 
+--
+use `exit-all` or `!!!`. 
+--
+
+
+    `exit` alone only exits the current "binding" (Pry subshell). If you're nested two or more bindings deep, you'll remain in Pry but "pop" one subshell.
+--
+
+ 1. **Get help**: 
+--
+use `help`. 
+--
+For help on a particular command  (e.g. `$`): `help $`.
+--
+
+ 1. **List available methods/constants** of a class/module: 
+--
+use `ls`:
+--
+ 
+    ```ruby
+    >> ls Math
+constants: DomainError  E  PI
+Math.methods: 
+  acos   asinh  atanh  cosh  exp    hypot   log    sin   tan 
+  acosh  atan   cbrt   erf   frexp  ldexp   log10  sinh  tanh
+  asin   atan2  cos    erfc  gamma  lgamma  log2   sqrt
+    ```
+--
+
+ 1. **Show source code**: 
+--
+use `show-source` or `$`. 
+--
+Add `-l` for line numbers.
+
+ 1. **Edit** a function or program: 
+--
+use `edit` followed by what you want to edit.
+--
+
+ 1. **See docs**: 
+--
+use `show-doc` or `?` followed by what you want docs for.
+
+---
+
+## Tools
+--
+
+
+Entering `help` alone brings up multi-page documentation. Main topics:
+--
+
+ * **Context**: what is the current object scope (where you are in the code)
+--
+
+
+ * **Editing**: manage or alter the current input line or input history 
+--
+
+
+ * **Introspection**: view documentation and source-code
+--
+
+
+ * **Gems**: install or manage
+--
+
+
+ * **Commands**: edit or add new command-set
+--
+
+
+ * **Aliases**: shortcuts for important commands
+--
+
+
+ * **Input and output**: control prompts, save output to shell, access the command line
+--
+
+
+ * **Misc**: (self-evident)
+--
+
+
+ * **Navigating pry**: (self-evident)
+--
+
+
+ * **Prompts**: control Pry's prompt
+
+---
+
+## Debugging with Pry
+
+To debug, `require 'pry'` in a file and then insert `binding.pry` wherever you want to stop execution and look around inside the program.
+--
+
+
+I wrote a little program and don't understand why it doesn't work. 
 
 ```ruby
-population = 80_000
-kind_of_place = case population
-                when 0..1000; "village"
-                when 1001..100_000; "town"
-                when 100_000..Float::INFINITY; "city"
-                # No need for else here, because of Float::INFINITY, above.
-                end
+require 'pry'
+
+def fn(n)
+  while !defined?(input) || input.empty?
+    print 'Enter input: '
+    input = gets.chomp
+    binding.pry
+  end
+  puts input * n
+end
 ```
 --
 
-
-(Remember — because I put `population` right after `case`, I don't have to write out an explicit `===` operator, but `case` treats it as though it's there, by default.)
---
-
-With classes, `---` identifies an instance of the class:
+When the line `binding.pry` is reached, a new Pry shell opens (numbered from 1) and I can run commands to (for example) examine values of variables at that moment in the execution.
 --
 
 
-```ruby
-a = [1, 2, 3]
-puts case a
-     when String then 'it is a string'
-     when Numeric then "it's a number"
-     when Array then 'we find that it is an array'
-     end
-```
+To return to program-execution, I type `exit`.
+
 --
 
-
-And there are other examples, too…
+For more sophisticated debugging tools, look at `pry-nav` and `pry-byebug`.
 
 ---
 
