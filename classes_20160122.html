@@ -126,15 +126,19 @@ class: center, middle
 
 # Modules and Classes
 ## David Branner, Dev Bootcamp
-### 20160104
+### 20160122
 
 ---
 
-## Differences between a module and a class
+### What Is in These Slides
 --
 
 
-(Both are ways of fostering **code reuse** and **modularization**.)
+You've encountered modules and classes in Phase 0. 
+--
+
+
+Both are ways of fostering **code reuse** and **modularization**.)
 --
 
 
@@ -142,11 +146,11 @@ class: center, middle
 --
 
 
- 1. How to use
+ 1. Using a Module or Class
 --
 
 
- 1. Naming
+ 1. Naming a Module or Class
 --
 
 
@@ -160,7 +164,7 @@ class: center, middle
 
 ---
 
-## State
+### State
 --
 
 
@@ -182,6 +186,7 @@ Differences between modules and classes with respect to state:
  1. A module provides methods and constants.
 --
 
+
  1. A class provides methods, constants, and **state**.
 --
 
@@ -200,46 +205,108 @@ You assign values to it with the setter; you access its value with the getter.
 
 
 ---
+### State, cont'd
+
+One of the key things that some methods do in a class is specify how to "set" (write) or "get" (read) instance variables. 
+--
+Here is a "getter" for an instance variable `color` — it simply returns the value of the variable:
+--
+
+```ruby
+def color
+  @color
+end
+```
+--
+
+And here is a "setter" for the same variable:
+--
+
+```ruby
+def color=(color)
+  @color = color
+end
+```
+--
+
+We have shorthand syntax for both kinds of method. 
+--
+For a getter:
+--
+
+```ruby
+attr_reader :color
+```
+--
+
+Notice that we are using a symbol here. 
+--
+(If you have more than one variable to write getters for, separate the symbols by commas.)
+--
+
+
+For a setter, the keyword is `attr_writer`. 
+--
+If you want both a setter and a getter for some variable, use `attr_attribute`.
+
+---
+### State, cont'd
 
 In practice, you will use this syntax most of the time:
 --
 
 ```ruby
 class MyClass
-  attr_reader :for_getter              # Can only read, not write.
-  attr_writer :for_setter              # Can only write, not read.
-  attr_accessor :for_setter_and_getter # Can both read and write.
-
-  def initialize(for_setter_and_getter, for_setter, for_getter)
-    @for_setter_and_getter = for_setter_and_getter
-    @for_setter = for_setter           # Can only be accessed within class.
-    @for_getter = for_getter           # Can only be changed within class.
-  end
+  attr_reader :get_me              # Can only read, not write.
+  attr_writer :set_me              # Can only write, not read.
+  attr_accessor :set_n_get_me      # Can both read and write.
 end
 ```
 --
+
+If you want to set instance variables at the moment you create an object, they should become arguments to the `initialize` method:
+--
+
+```ruby
+class MyClass
+  attr_reader :get_me              # Can only read, not write.
+  attr_writer :set_me              # Can only write, not read.
+  attr_accessor :set_n_get_me      # Can both read and write.
+
+  def initialize(args={})
+    @set_n_get_me = args.fetch(:first, nil) # Fully accessible outside class.
+    @set_me = args.fetch(:second, nil)      # Only read from within class.
+    @get_me = args.fetch(:third, nil)       # Only changed within class.
+  end
+end
+```
+
+etc.
+
+---
+### State, cont'd
+
 
 Accessing the three different kinds of attributes we just defined:
 --
 
 ```ruby
-[2] pry(main)> m = MyClass.new('first', 'second', 'third')
-=> #<MyClass:0x007fb230a13800
- @for_getter="third",
- @for_setter="second",
- @for_setter_and_getter="first">
-[3] pry(main)> m.for_setter_and_getter
-=> "first"
-[4] pry(main)> m.for_setter
-NoMethodError: undefined method `for_setter' for #<MyClass:0x007fb230a13800>
-Did you mean?  for_setter=
-               for_getter
-from (pry):18:in `__pry__'
-[5] pry(main)> m.for_getter
-=> "third"
+[2] pry(main)> m = MyClass.new({first: '1st', second: '2nd', third: '3rd'})
+=> #<MyClass:0x007fea4b101bd8 @get_me="3rd", @set_me="2nd", @set_n_get_me="1st">
+
+[3] pry(main)> m.set_n_get_me
+=> "1st"
+[4] pry(main)> m.set_me
+NoMethodError: undefined method `set_me' for #<MyClass:0x007fea4b101bd8>
+Did you mean?  set_me=
+               get_me
+from (pry):104:in `__pry__'
+[5] pry(main)> m.get_me
+=> "3rd"
 ```
 
 ---
+### State, cont'd
 
 Note that there _is_ a way to access an attribute marked as `attr_writer`: 
 --
@@ -253,14 +320,14 @@ Here's an example of using a `to_s` to _display_ an `attr_writer` attribute (wit
 
 ```ruby
 class MyClass
-  attr_writer :for_setter              # Can only write, not read.
+  attr_writer :set_me              # Can only write, not read.
 
-  def initialize(for_setter)
-    @for_setter = for_setter           # Can only be accessed within class.
+  def initialize(set_me)
+    @set_me = set_me           # Can only be accessed within class.
   end
 
   def to_s                             # Convenient way of displaying this.
-     'for_setter: ' + @for_setter
+     'set_me: ' + @set_me
   end
 end
 ```
@@ -270,18 +337,17 @@ In actual use:
 --
 
 ```ruby
-[1] pry(main)> m = MyClass.new('second')
-=> #<MyClass:0x007fc5d1918478 @for_setter="second">
-[2] pry(main)> m.for_setter
-NoMethodError: undefined method `for_setter' for #<MyClass:0x007fc5d1918478 @for_setter="second">
-from (pry):25:in `__pry__'
+[1] pry(main)> m = MyClass.new('2nd')
+=> #<MyClass:0x007fea4b0528b8 @set_me="2nd">
+[2] pry(main)> m.set_me
+NoMethodError: undefined method `set_me' for #<MyClass:0x007fea4b0528b8 @set_me="2nd"> ...
 [3] pry(main)> m.to_s
-=> "for_setter: second"
+=> "set_me: 2nd"
 ```
 
 ---
 
-## Using a module or class
+### Using a Module or Class
 --
 
 
@@ -328,7 +394,7 @@ The class is a blueprint; the instance is one particular case made from the blue
 
 ---
 
-## Naming modules and classes
+### Naming a Module or Class
 --
 
 Both classes and modules are capitalized and use `CamelCase`. 
@@ -356,7 +422,7 @@ Both classes and modules are capitalized and use `CamelCase`.
 
 ---
 
-## Terminology Review
+### Terminology Review
 
  1. **state**
 --
