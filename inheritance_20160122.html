@@ -158,11 +158,17 @@ class NewClass < OldClass
 you are making the statement "`NewClass` is a kind of `OldClass`". 
 --
 
-**It's a statement of identity.**
+**It's a statement of identity.** 
+--
+Programmeers of object-oriented languages often ask themselves: "Can I say that **"`X` is a `Y`"** 
+--
+or **"`X` is one type of `Y`"**? 
+--
+If so, `X` can inherit from `Y`.
 --
 
 
-When you make `PearTree` class that inherits from the `FruitTree` class, you are saying that a `PearTree` is a type of `FruitTree`. 
+For example, when you make `PearTree` class that inherits from the `FruitTree` class, you are saying that a `PearTree` is a type of `FruitTree`. 
 --
 
 
@@ -381,8 +387,6 @@ _at the moment it is to be executed_ (rather than when the code is parsed)
  1. **constructor**
 --
 : the `initialize` method, which actually brings into being an instance of the class
-
-
 
  1. **super**
 --
