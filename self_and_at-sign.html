@@ -165,7 +165,7 @@ You can refer to class from within the method as `self.class`:
 ```ruby
 class Klass
   claim1 = self == Klass
-  print "Inside class but outside method, self == Klass: #{claim1}\n\n"
+  print "Inside class but outside method, self == Klass: #{claim1}\n"
 
   def mthd
     claim2 = self.class == Klass

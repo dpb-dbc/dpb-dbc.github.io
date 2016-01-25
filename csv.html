@@ -126,7 +126,7 @@ class: center, middle
 
 # Dealing with Comma-Separated Values (CSV)
 ## David Branner, Dev Bootcamp
-### 20160105
+### 20160125
 
 ---
 
@@ -235,7 +235,7 @@ items = [{first: 'primero', second: 'segundo', third: 'tercera'},
 ]
 
 CSV.open('output.csv', 'wb') do |csv|
-  items.each { |item| csv << [ item.values }
+  items.each { |item| csv << [ item.values ] }
 end
 ```
 --
@@ -251,11 +251,11 @@ pierwszy,sekunda,trzeci
 ```
 --
 
-Notice that the `CSV` object **takes an array of strings as input**. 
+Notice that the `CSV` object **takes an array of strings as input** on each iteration. 
 --
 
 
-If you wish to pass a single string to the `CSV` object, you must still place it into an array: `csv << [ "sample string here" ]`.
+If you wish to pass just a single string to the `CSV` object, you must still place it into an array: `csv << [ "sample string here" ]`.
 
 ---
 
