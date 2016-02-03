@@ -124,149 +124,25 @@
 
 class: center, middle
 
-# `self` and the `@`-sign
+# qqq
 ## David Branner
-### 20160125
+### 201601qqq
 
 ---
 
 ### What these slides cover
 
- 1. What `self` Refers to
---
-
- 
- 1. When Must We Use `self`?
---
-
- 1. Omitting `@` with an Instance Variable
+ 1. qqq
 
 ---
 
-### What `self` Refers to
+### Terminology Review
+
+ 1. **qqq**
+--
+: qqq
 --
 
-
-**Within a method**, `self` refers to the instance (object) that the method is part of. 
---
-It is rendered by showing its name, memory location, and attributes.
---
-
-
-**Outside of any method** 
---
-(but still within a class)
---
-, it refers to that class (by name) as a constant. 
---
-You can refer to class from within the method as `self.class`:
---
-
-```ruby
-class Klass
-  claim1 = self == Klass
-  print "Inside class but outside method, self == Klass: #{claim1}\n"
-
-  def mthd
-    claim2 = self.class == Klass
-    print "Inside method, self.class == Klass: #{claim2}\n"
-    print "     and self: #{self}\n"
-  end
-end
-```
---
-
-```ruby
-[1] pry(main)> load 'klass.rb'
-Inside class but outside method, self == Klass: true
-=> true
-[2] pry(main)> Klass.new.mthd
-Inside method, self.class == Klass: true
-     and self: #<Klass:0x007f9dc3ac2070>
-=> nil
-```
----
-
-### When Must We Use `self`?
---
-
- 1. **In most cases, it is not needed**.
---
-
-
-    The examples below are given for reference here, but rather than committing them to memory now, I recommend you be prepared to look them up as needed.
---
-
- 1. With instance attributes **marked `attr_writer`**, `self.name` is the same as `@name` within a class. 
---
-
-
-    But **without `attr_writer`**, `self.name` is necessary, otherwise `name` would be a local variable.
---
-
- 1. If a module making reference to a `name` attribute is used in the global namespace, then the attribute has to be called `self.name`.
---
-
-
- 1. With a setter method, `self.method = ...` might be mistaken for the assignment of an instance variable (but we have other ways to avoid that).
-
----
-
-### Omitting `@` with an Instance Variable
---
-
-
-First example — there is only an instance-variable: 
---
-
-```ruby
-class Book1
-  attr_accessor :name
-  def initialize(x)
-    @name = x
-    puts "@name:     #{@name}"     # @name means @name
-    puts "self.name: #{self.name}" # Means the same as @name.
-    puts "name:      #{name}"      # Assumes we mean @name; what else?
-  end
-end
-```
---
-
-```ruby
-[1] pry(main)> Book1.new('yah')
-@name:     yah
-self.name: yah
-name:      yah
-=> #<Book1:0x007fb6d9ae1ce8 @name="yah">
-```
-
----
-### Omitting `@` with an Instance Variable, cont'd
-
-Second example — the same variable name exists in both local and instance-variable forms:
---
-
-```ruby
-class Book2
-  attr_accessor :name
-  def initialize(x)
-    @name = x
-    name = 'oops'                  # Create "name", different from "@name"!
-    puts "@name:     #{@name}"     # @name means @name
-    puts "self.name: #{self.name}" # Still means the same as @name
-    puts "name:      #{name}"      # "name" != "@name", and we said "name".
-  end
-end
-```
---
-
-```ruby
-[1] pry(main)> Book2.new('yah')
-@name:     yah
-self.name: yah
-name:      oops
-=> #<Book2:0x007fb6d93be790 @name="yah">
-```
 
 ---
 
